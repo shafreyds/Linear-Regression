@@ -1,0 +1,66 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+import statsmodels
+import statsmodels.api as sm
+import sklearn
+from sklearn.model_selection import train_test_split
+
+adv = pd.read_csv("https://raw.githubusercontent.com/rkmishracs/dataset/main/advertising.csv")
+
+adv.head()
+
+adv.shape
+
+adv.info()
+
+adv.describe()
+
+sns.regplot(x='TV', y="Sales", data=adv)
+
+sns.regplot(x="Radio", y="Sales", data=adv)
+
+sns.regplot(x="Newspaper", y="Sales", data=adv)
+
+sns.pairplot(data=adv, x_vars=['TV', "Radio", "Newspaper"], y_vars="Sales")
+
+adv.corr()
+
+sns.heatmap(adv.corr())
+
+sns.heatmap(adv.corr(),annot=True)
+
+X=adv['TV']
+y=adv['Sales']
+
+X_train, X_test, y_train, y_test= train_test_split(X,y, train_size=0.70, random_state=100)
+
+X_train_sm=sm.add_constant(X_train)
+X_train_sm.head()
+
+lr=sm.OLS(y_train, X_train_sm)
+lr_model=lr.fit()
+lr_model.params
+
+lr_model.summary()
+
+plt.scatter(X_train, y_train)
+
+plt.scatter(X_train, y_train)
+plt.plot(X_train, 6.948+0.054*X_train,'r')
+
+y_train_pred=lr_model.predict(X_train_sm)
+y_train_pred
+
+residual=y_train-y_train_pred
+residual
+
+plt.figure()
+sns.displot(residual)
+
+plt.scatter(X_train, residual)
+plt.show()
+
+
